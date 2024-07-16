@@ -1,0 +1,179 @@
+# openapi.yaml
+openapi: 3.0.0
+info:
+  title: API Documentation
+  version: 1.0.0
+  description: API documentation using swagger-jsdoc and swagger-ui-express
+
+paths:
+  /user/{userId}/join/{communityId}:
+    post:
+      summary: Join a community
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: ObjectId
+        - in: path
+          name: communityId
+          required: true
+          description: Community ID
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: User joined community
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+        '501':
+          description: Not implemented
+  /user/{userId}/leave:
+    delete:
+      summary: Leave a community
+      parameters:
+        - in: path
+          name: userId
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: User left community
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+        '501':
+          description: Not implemented
+  /user:
+    get:
+      summary: Get all users with their total experience points
+      responses:
+        '200':
+          description: A list of users with their total experience points
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserWithPoints'
+        '500':
+          description: Internal server error
+  /user/{id}:
+    get:
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: User ID
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+  /community/leaderboard:
+    get:
+      summary: Get the leaderboard
+      responses:
+        '200':
+          description: Leaderboard retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    communityId:
+                      type: string
+                      format: ObjectId
+                    totalPoints:
+                      type: number
+        '500':
+          description: Internal server error
+  /community/{id}:
+    get:
+      summary: Get a community by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Community ID
+          schema:
+            type: string
+            format: ObjectId
+      responses:
+        '200':
+          description: A community object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Community'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    UserWithPoints:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+        email:
+          type: string
+        profilePicture:
+          type: string
+        totalExperience:
+          type: number
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+        email:
+          type: string
+        profilePicture:
+          type: string
+        experiencePoints:
+          type: array
+          items:
+            type: object
+            properties:
+              points:
+                type: number
+              timestamp:
+                type: string
+                format: date-time
+
+    Community:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: ObjectId
+        name:
+          type: string
+        logo:
+          type: string
