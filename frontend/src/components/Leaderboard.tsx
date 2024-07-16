@@ -31,22 +31,24 @@ const Leaderboard = () => {
                     <HeaderRow>
                         <RankHeader>Rank</RankHeader>
                         <CommunityHeader>Community</CommunityHeader>
+                        <MemberHeader>Members</MemberHeader>
                         <PointsHeader>EXP</PointsHeader>
                     </HeaderRow>
                     {firstColumn.map((entry, index) => (
-                        <LeaderboardEntry key={entry.communityId}>
+                        <LeaderboardEntry key={entry.communityId} isEven={index % 2 === 0}>
                             <Rank>{index + 1}</Rank>
                             <CommunityInfo>
                                 <Logo src={entry.logo} alt="Community Logo"/>
                                 <span>
-                                    {index === 0 && ' 🥇'}
-                                    {index === 1 && ' 🥈'}
-                                    {index === 2 && ' 🥉'}
-                                </span>
-                                <span>
                                     {entry.name}
                                 </span>
+                                <span>
+                                    {index === 0 && <Emoji>🥇</Emoji>}
+                                    {index === 1 && <Emoji>🥈</Emoji>}
+                                    {index === 2 && <Emoji>🥉</Emoji>}
+                                </span>
                             </CommunityInfo>
+                            <Points>{entry.userCount}</Points>
                             <Points>{entry.totalPoints}</Points>
                         </LeaderboardEntry>
                     ))}
@@ -55,15 +57,17 @@ const Leaderboard = () => {
                     <HeaderRow>
                     <RankHeader>Rank</RankHeader>
                         <CommunityHeader>Community</CommunityHeader>
+                        <MemberHeader>Members</MemberHeader>
                         <PointsHeader>EXP</PointsHeader>
                     </HeaderRow>
                     {secondColumn.map((entry, index) => (
-                        <LeaderboardEntry key={entry.communityId}>
+                        <LeaderboardEntry key={entry.communityId} isEven={index % 2 === 0}>
                             <Rank>{half + index + 1}</Rank>
                             <CommunityInfo>
                                 <Logo src={entry.logo} alt="Community Logo" />
                                 <span>{entry.name}</span>
                             </CommunityInfo>
+                            <Points>{entry.userCount}</Points>
                             <Points>{entry.totalPoints}</Points>
                         </LeaderboardEntry>
                     ))}
@@ -90,13 +94,11 @@ const LeaderboardColumn = styled.div`
     width: 500px;
 `;
 
-const LeaderboardEntry = styled.div`
+const LeaderboardEntry = styled.div<{ isEven: boolean }>`
     display: flex;
     align-items: center;
-    border: 1px solid #746cd3;
-    border-radius: 10px;
     padding: 1rem;
-    margin: 0.5rem 0;
+    background-color: ${({ isEven }) => (isEven ? '#000000' : '#242424')};
 `;
 
 const Rank = styled.div`
@@ -148,9 +150,21 @@ const CommunityHeader = styled.div`
   justify-content: center;
 `;
 
+const MemberHeader = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const PointsHeader = styled.div`
   width: 100px;
   text-align: center;
+`;
+
+const Emoji = styled.span`
+  font-size: 1.5rem;
+  margin-left: 0.5rem;
 `;
 
 export default Leaderboard;
